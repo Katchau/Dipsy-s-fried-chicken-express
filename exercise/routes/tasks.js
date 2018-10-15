@@ -16,4 +16,16 @@ router.get('/:id', function(req, res) {
         })
 });
 
+router.get('/', function (req, res) {
+    Task.find().exec()
+        .then(function (tasks) {
+            res.send(tasks);
+        })
+        .catch(function (err) {
+            res.send({
+                message: 'Error at getting tasks' + err.toString()
+            })
+        })
+});
+
 module.exports = router;

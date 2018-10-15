@@ -4,7 +4,7 @@
 const mongoose = require('mongoose');
 
 const taskSchema = new Schema({
-    _id: Number,
+    _id: mongoose.Schema.Types.ObjectId,
     name: {
         type: String,
         required: true
@@ -13,10 +13,11 @@ const taskSchema = new Schema({
         type: Date,
         default: Date.now
     },
-    status: [{
+    status: {
         type: String,
+        enum: ['pending', 'ongoing', 'completed'],
         default: 'pending'
-    }]
-},{_id: false});
+    }
+});
 
 module.exports = mongoose.model('Task', taskSchema);

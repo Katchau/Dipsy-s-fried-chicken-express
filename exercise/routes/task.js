@@ -1,11 +1,11 @@
 var express = require('express');
-// const mongoose = require('mongoose');
+const mongoose = require('mongoose');
 var router = express.Router();
 const Task = require('../models/taskModel');
 
-router.post('/:id', function(req, res) {
+router.post('/', function(req, res) {
     const task = new Task({
-        _id: req.params.id,
+        _id: new mongoose.Types.ObjectId(),
         name: req.body.name,
         created_date: req.body.created_date,
         status: req.body.status
