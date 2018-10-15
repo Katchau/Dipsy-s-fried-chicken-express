@@ -2,9 +2,10 @@
 // created_date	Date	default: Date.now	valid Date object
 // status	String Enum (Array)	default: [‘pending’]	[‘pending’, ‘ongoing’, ‘completed’]
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
 const taskSchema = new Schema({
-    _id: mongoose.Schema.Types.ObjectId,
+    _id: Schema.Types.ObjectId,
     name: {
         type: String,
         required: true
@@ -14,9 +15,12 @@ const taskSchema = new Schema({
         default: Date.now
     },
     status: {
-        type: String,
-        enum: ['pending', 'ongoing', 'completed'],
-        default: 'pending'
+        type: [{
+            type: String,
+            enum: ['pending', 'ongoing', 'completed'],
+            default: 'pending'
+        }],
+        default: ['pending']
     }
 });
 

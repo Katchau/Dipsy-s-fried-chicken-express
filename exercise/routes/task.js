@@ -4,6 +4,7 @@ var router = express.Router();
 const Task = require('../models/taskModel');
 
 router.post('/', function(req, res) {
+    console.log(req.body);
     const task = new Task({
         _id: new mongoose.Types.ObjectId(),
         name: req.body.name,
@@ -12,13 +13,13 @@ router.post('/', function(req, res) {
     });
     task.save()
         .then(function (result) {
-            res.send({
+            res.status(201).send({
                 message: 'Task successfully created',
                 id: result._id
             })
         })
         .catch(function (err) {
-            res.send({
+            res.status(500).send({
                 message: 'Error at creating task' + err.toString()
             })
         })

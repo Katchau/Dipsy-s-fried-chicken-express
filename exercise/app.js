@@ -14,7 +14,12 @@ var taskRouter = require('./routes/task');
 var tasksRouter = require('./routes/tasks');
 
 var app = express();
-mongoose.connect('mongodb://localhost/rossetti');
+
+const mongUrl = 'mongodb://127.0.0.1/rossetti';
+mongoose.connect(mongUrl);
+mongoose.Promise = global.Promise;
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

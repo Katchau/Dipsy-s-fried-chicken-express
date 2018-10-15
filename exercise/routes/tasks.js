@@ -28,4 +28,41 @@ router.get('/', function (req, res) {
         })
 });
 
+router.put('/:id', function (req, res) {
+    const id = req.params.id;
+    Task.updateOne({_id: id}, {$set: req.body}).exec()
+        .then(function (result) {
+            Task.findById(id).exec().then(function (result2) {
+                res.send({
+                    message: 'Task successfully updated',
+                    id: id,
+                    name: result2.name,
+                    created_date: result2.created_date,
+                    status: result2.status
+                })
+            })
+        })
+        .catch(function (err) {
+            res.send({
+                message: 'Error at updating task' + err.toString()
+            });
+        })
+});
+
+router.delete('/:id', function (req, res) {
+    const id = req.params.id;
+    Task.remove({_id: id}).exec()
+        .then(function (result) {
+            res.send({
+                message: 'Task successfully deleted',
+                id: id
+            })
+        })
+        .catch(function (err) {
+            res.send({
+                message: 'Error at deleting task' + err.toString()
+            });
+        })
+});
+
 module.exports = router;
