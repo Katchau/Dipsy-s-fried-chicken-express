@@ -51,7 +51,7 @@ router.put('/:id', function (req, res) {
 
 router.delete('/:id', function (req, res) {
     const id = req.params.id;
-    Task.remove({_id: id}).exec()
+    Task.deleteOne({_id: id}).exec()
         .then(function (result) {
             res.send({
                 message: 'Task successfully deleted',
