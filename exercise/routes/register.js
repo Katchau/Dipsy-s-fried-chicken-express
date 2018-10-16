@@ -1,36 +1,35 @@
 var express = require('express');
 // const mongoose = require('mongoose');
 var router = express.Router();
-var jwt = require('jsonwebtoken');
+var auth = require('../auth/verifyToken');
 const User = require('../models/user');
-const secretPath = path.join(__dirname, '..', 'config.js');
 
 // authentication: https://scotch.io/tutorials/authenticate-a-node-js-api-with-json-web-tokens ou passport.js
-router.use(function (req, res, next) {
-    var token = req.body.token || req.query.token;
-    if (token !== undefined && token !== '' && token !== null) {
-        try {
-            jwt.verify(token, require(secretPath).secret, function (err, decoded) {
-                if (err) {
-                    return res.send({success:false, content: 'Failed Token Authentication!'});
-                }
-                // req.decoded = decoded;
-                req.body.userId = decoded.id;
-                next();
-            });
-        } catch (err) {
-            return res.send({success:false, content: 'Failed Token Authentication!'});
-        }
-    } else return res.send({success:false, content: 'Invalid token!'});
+// router.use(function (req, res, next) {
+//     var token = req.body.token || req.query.token;
+//     if (token !== undefined && token !== '' && token !== null) {
+//         try {
+//             jwt.verify(token, require(secretPath).secret, function (err, decoded) {
+//                 if (err) {
+//                     return res.send({success:false, content: 'Failed Token Authentication!'});
+//                 }
+//                 // req.decoded = decoded;
+//                 req.body.userId = decoded.id;
+//                 next();
+//             });
+//         } catch (err) {
+//             return res.send({success:false, content: 'Failed Token Authentication!'});
+//         }
+//     } else return res.send({success:false, content: 'Invalid token!'});
+// });
+
+router.get('/', function (req, res) {
+    res.send({
+        message: 'Register User Page'
+    })
 });
 
-function createToken(obj) {
-    return jwt.sign(obj, require(secretPath).secret, {
-        expiresInMinutes: 1440
-    });
-}
-
-router.post('/register', function(req, res) {
+router.post('/', function(req, res) {
     if(req.body.password !== req.body.passwordConf){
         res.status(400).send({
             message: 'Passwords do not match.'
@@ -48,7 +47,7 @@ router.post('/register', function(req, res) {
             var obj =  {
                 id: result._id
             };
-            var token = createToken(obj);
+            var token = auth.createToken(obj);
             res.status(201).send({
                 message: 'User has been successfully registered',
                 auth: true,
