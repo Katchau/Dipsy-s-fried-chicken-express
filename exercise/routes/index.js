@@ -2,15 +2,40 @@ var express = require('express');
 var router = express.Router();
 var createError = require('http-errors');
 var auth = require('../auth/verifyToken');
+var path = require('path');
+var filePath = path.join(__dirname, '..', 'files');
+var download = require('download-file');
+const latex = require('node-latex');
+const fs = require('fs');
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  // res.render('index', { title: 'Express' });
-  var name = req.query.name;
-  if (name === null || name === undefined) {
-    res.send(createError(404));
-  }
-  else res.send({message: "Hello " +  name + "!"});
+router.get('/', function(req, res) {
+    var url = req.query.url;
+    console.log(url);
+    var options = {
+        directory: filePath,
+        filename: "sample.tex"
+    };
+    download(url, options, function(err){
+        if (err) {
+            console.error(err);
+            res.send({status: 'failure'})
+            return;
+        }
+
+        const input = fs.createReadStream(filePath + '/sample.tex');
+        const output = fs.createWriteStream(filePath + '/final.pdf');
+        const pdf = latex(input);
+
+        pdf.pipe(output);
+        pdf.on('error', function (err) {
+            console.error(err);
+            return res.send({status: 'failure'});
+        });
+        pdf.on('finish', err => res.send({status: 'success'}));
+    })
 });
 
 router.get('/profile', function (req, res) {
