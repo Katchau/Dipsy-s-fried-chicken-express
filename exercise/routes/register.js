@@ -36,7 +36,7 @@ router.post('/', function(req, res) {
         });
         return;
     }
-    var password = req.body.password; // TODO qq coisa aqui
+    var password = auth.hashPassword(req.body.password);
     const user = new User({
         email: req.body.email,
         username: req.body.username,

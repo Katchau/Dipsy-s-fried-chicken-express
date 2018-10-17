@@ -12,6 +12,8 @@ var vappuRouter = require('./routes/vappu');
 var imagesRouter = require('./routes/images');
 var taskRouter = require('./routes/task');
 var tasksRouter = require('./routes/tasks');
+var regRouter = require('./routes/register');
+var loginRouter = require('./routes/login');
 
 var app = express();
 
@@ -38,6 +40,8 @@ app.use('/vappu', vappuRouter);
 app.use('/images', imagesRouter);
 app.use('/task', taskRouter);
 app.use('/tasks', tasksRouter);
+app.use('/register', regRouter);
+app.use('/login', loginRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
