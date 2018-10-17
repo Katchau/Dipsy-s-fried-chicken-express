@@ -1,16 +1,16 @@
 var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
 const SALT_ROUND = 10;
+var path = require('path');
 const secretPath = path.join(__dirname, '..', 'config.js');
 
 function createToken(obj) {
     return jwt.sign(obj, require(secretPath).secret, {
-        expiresInMinutes: 1440
+        expiresIn: 60*60*24
     });
 }
 
-function verifyToken(req) {
-    var token = req.body.token || req.query.token;
+function verifyToken(token) {
     if (token !== undefined && token !== '' && token !== null) {
         try {
             var decoded = jwt.verify(token, require(secretPath).secret);

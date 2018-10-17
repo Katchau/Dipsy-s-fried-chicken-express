@@ -26,7 +26,11 @@ router.post('/', function (req, res) {
                     message: 'Wrong email or password.'
                 })
             }
-            else res.redirect('/profile'); //TODO falta session variable
+            else {
+                req.session.token = auth.createToken({id: user._id});
+                req.session.userInfo = user;
+                res.redirect('/profile');
+            }
         })
         .catch(function (err) {
             console.error(err);
